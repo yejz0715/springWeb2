@@ -11,7 +11,7 @@
 <div id="bestProduct">
 	<c:forEach items="${newProductList}"  var = "productVO" >
 		<div id="item"><!-- 상품 하나 -->
-			<a href="productDetail&pseq=${productVO.pseq}">
+			<a href="productDetail?pseq=${productVO.pseq}">
 				<img src="resources/product_images/${productVO.image}" /> <!-- 상품이미지 -->
 				<h3> ${productVO.name} - <fmt:formatNumber value="${productVO.price2}" 
 				   			type="currency"></fmt:formatNumber></h3> <!-- 상품명-가격  -->
@@ -24,7 +24,7 @@
 <div id="bestProduct">
 	<c:forEach items="${bestProductList}"  var = "productVO" >
 		<div id="item">
-			<a href="productDetail&pseq=${productVO.pseq}">
+			<a href="productDetail?pseq=${productVO.pseq}">
 				<img src="resources/product_images/${productVO.image}" />
 				<h3> ${productVO.name} - <fmt:formatNumber value="${productVO.price2}" 
 			   			type="currency"></fmt:formatNumber></h3>

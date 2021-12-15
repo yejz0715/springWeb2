@@ -67,7 +67,7 @@ drop sequence cart_seq;
 create sequence cart_seq start with 1;
 
 
-
+select * from CART;
 
 alter table orders drop primary key cascade;
 drop table orders purge;
@@ -81,8 +81,8 @@ create table orders(
 drop sequence orders_seq;
 create sequence orders_seq start with 1;
 
-
-
+select * from ORDERS;
+select * from order_detail;
 alter table order_detail drop primary key cascade;
 drop table order_detail purge;
 
