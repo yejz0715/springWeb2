@@ -21,7 +21,7 @@ public class ProductController {
 	@Autowired
 	ProductService ps;
 	
-	@RequestMapping(value="/", method=RequestMethod.GET)
+	@RequestMapping(value="/admin", method=RequestMethod.GET)
 	public String index(Model model) {
 		
 		//List<ProductVO> nlist = ps.getNewList();

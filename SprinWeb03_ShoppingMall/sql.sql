@@ -1,0 +1,1 @@
+update order_detail set result='2' where oseq=21 --주문내역중 21번 처리완료

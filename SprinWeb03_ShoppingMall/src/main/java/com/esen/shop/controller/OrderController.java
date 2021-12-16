@@ -136,4 +136,29 @@ public class OrderController {
 		}
 		return mav;
 	}
+	
+	
+	@RequestMapping(value="/orderDetail")
+	public ModelAndView orderDetail(HttpServletRequest request, @RequestParam("oseq")int oseq) {
+		ModelAndView mav = new ModelAndView();
+		HttpSession session = request.getSession();
+		MemberVO loginUser =(MemberVO)session.getAttribute("loginUser");
+
+		if(loginUser == null)mav.setViewName("member.login");
+		else {
+			List<OrderVO>orderList=os.listOrderByOseq(oseq); //주문번호로 주문 상품들의 리스트 리턴
+			int totalPrice=0;
+			for(OrderVO ovo  : orderList)
+				totalPrice +=ovo.getPrice2() * ovo.getQuantity();
+			mav.addObject("orderList",orderList);
+			mav.addObject("totalPrice", totalPrice);
+			mav.setViewName("mypage/orderDetail");
+			
+			mav.addObject("orderDetail",orderList.get(0));
+		}
+		return mav;
+	}
+	
+	
+	
 }
