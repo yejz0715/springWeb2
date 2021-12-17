@@ -21,7 +21,7 @@
 	<tr><td>아이디</td><td><input type="text" name="workId" size="10"></td></tr>
 	<tr><td>비밀번호</td><td><input type="password" name="workPwd" size="10"></td></tr>
 	<tr align="center"><td colspan="2">
-	<input class="btn" type="submit" value="업무 로그인" onClick="return worker_check();"><br><br>
+	<input class="btn" type="submit" value="업무 로그인" onClick="return worker_check();">
 	<h4 style="color:red">${message}</h4></td></tr>
 	</table>
 	 </form>

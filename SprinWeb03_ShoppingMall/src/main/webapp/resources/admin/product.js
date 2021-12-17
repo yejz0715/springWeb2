@@ -96,8 +96,21 @@ function go_mod_save(){
 	}
 }
 
+function go_search_order(){
+	if( document.frm.key.value=="") return;
+	document.frm.action = "orderList?page=1";
+	document.frm.submit();
+}
 
 
 
+function go_total_order(){
+	document.frm.key.value="";
+	document.frm.action = "orderList?page=1";
+	document.frm.submit();
+}
+
+function go_order_save(){
+}
 
 

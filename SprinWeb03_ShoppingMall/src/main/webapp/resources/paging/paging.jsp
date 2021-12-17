@@ -30,7 +30,7 @@
 			<a href="${action}&page=${param.endPage+1}">▶</a>&nbsp;
 	</c:if>	
 </div>
-<!-- 현재 페이지는 나타나는 내용에 commend, prev, beginPage, endPage, next값이
+<!-- 현재 페이지는 나타나는 내용에 commend, prev, beginPage, endPage, next, page 값이
 파라미터로 전달되야 정상 표현되는 페이지입니다 -->
 </body>
 </html>

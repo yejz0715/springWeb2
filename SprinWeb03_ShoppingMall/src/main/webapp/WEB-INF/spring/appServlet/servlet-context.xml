@@ -28,14 +28,15 @@
 		<beans:property name="user" value="scott" />
 		<beans:property name="password" value="tiger"/>
 		<beans:property name="maxPoolSize" value="200" />
-		<beans:property name="checkoutTimeout" value="60000"/>
+	    <beans:property name="checkoutTimeout" value="60000"/> 
 		<beans:property name="maxIdleTime" value="1800" />
 		<beans:property name="idleConnectionTestPeriod"	value="600"/>
 	</beans:bean>
 	
-	
-	
-	<context:component-scan base-package="com.esen.shop" />
+		<context:component-scan base-package="com.esen.shop" />
+	<!-- Load configuration file -->
+    <context:property-placeholder location="classpath*:properties/*.properties" />
+
 	
 	
 	

@@ -9,6 +9,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
+import com.esen.shop.dto.OrderVO;
 import com.esen.shop.dto.Paging;
 import com.esen.shop.dto.ProductVO;
 import com.mchange.v2.c3p0.ComboPooledDataSource;
@@ -76,5 +77,49 @@ public class AdminDao {
 			}
 		}, key);
 		return list.get(0);
+	}
+
+
+	public void insertProduct(ProductVO pvo) {
+		String sql= "insert into product(pseq, kind, name, price1, price2, price3, content, image)"
+				+ "values(product_seq.nextVal, ?, ?, ?, ?, ?, ?, ?)";
+		template.update(sql,pvo.getKind(), pvo.getName(), pvo.getPrice1(), pvo.getPrice2(), pvo.getPrice3(),
+							pvo.getContent(), pvo.getImage());		
+	}
+
+
+	public void updateProduct(ProductVO pvo) {
+		String sql = "update product set kind=?, useyn=?, name=?, price1=?, price2=?, price3=?"
+				+ "content=?, image=?, bestyn=? where pseq=?";
+		template.update(sql, pvo.getKind(), pvo.getUseyn(), pvo.getName(), pvo.getPrice1(), pvo.getPrice2(),
+				pvo.getPrice3(), pvo.getContent(), pvo.getImage(), pvo.getBestyn(), pvo.getPseq());
+		
+	}
+
+
+	public List<OrderVO> listOrderAll(Paging paging, String key) {
+		String sql= "select * from order view order by result, odseq desc";
+		List<OrderVO>list=template.query(sql, new RowMapper<OrderVO>() {
+
+			@Override
+			public OrderVO mapRow(ResultSet rs, int rowNum) throws SQLException {
+				OrderVO ovo=new OrderVO();
+				ovo.setOdseq(rs.getInt("odseq"));
+				ovo.setOseq(rs.getInt("oseq"));
+				ovo.setId(rs.getString("id"));
+				ovo.setIndate(rs.getTimestamp("indate"));
+				ovo.setMname(rs.getString("mname"));
+				ovo.setZipnum(rs.getString("zipnum"));
+				ovo.setAddress(rs.getString("address"));
+				ovo.setPhone(rs.getString("phone"));
+				ovo.setPseq(rs.getInt("pseq"));
+				ovo.setQuantity(rs.getInt("quantity"));
+				ovo.setPname(rs.getString("pname"));
+				ovo.setPrice2(rs.getInt("price2"));
+				ovo.setResult(rs.getString("result"));				
+				return ovo;
+			}			
+		});
+		return list;
 	}
 }

@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.esen.shop.dao.AdminDao;
+import com.esen.shop.dto.OrderVO;
 import com.esen.shop.dto.Paging;
 import com.esen.shop.dto.ProductVO;
 
@@ -26,6 +27,22 @@ public class AdminService {
 
 	public int getAllCount(String tableName, String fieldName, String key) {
 		return adao.getAllCount( tableName, fieldName, key );
+	}
+
+	public void insertProduct(ProductVO pvo) {
+		adao.insertProduct(pvo);
+		
+	}
+
+	
+
+	public void updateProduct(ProductVO pvo) {
+		adao.updateProduct(pvo);
+		
+	}
+
+	public List<OrderVO> listOrderAll(Paging paging, String key) {
+		return adao.listOrderAll(paging,key);
 	}
 }
 
