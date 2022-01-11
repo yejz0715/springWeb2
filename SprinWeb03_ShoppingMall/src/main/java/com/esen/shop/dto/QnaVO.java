@@ -53,6 +53,10 @@ public class QnaVO {
 	public void setIndate(Timestamp indate) {
 		this.indate = indate;
 	}
+	public void updateQna(QnaVO qvo) {
+		
+		
+	}
 	
 	
 }

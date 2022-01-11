@@ -12,18 +12,19 @@ import org.springframework.stereotype.Repository;
 import com.esen.shop.dto.OrderVO;
 import com.esen.shop.dto.Paging;
 import com.esen.shop.dto.ProductVO;
+import com.esen.shop.dto.QnaVO;
 import com.mchange.v2.c3p0.ComboPooledDataSource;
 
 @Repository
 public class AdminDao {
 
 	private JdbcTemplate template;
+	
 	@Autowired  
 	public AdminDao( ComboPooledDataSource dataSource ) {
 		this.template = new JdbcTemplate(dataSource);
 	}
-	
-	
+
 	public int workerCheck(String workId, String workPwd) {
 		int result = 0;
 		String sql = "select pwd from worker where id=?";
@@ -79,47 +80,83 @@ public class AdminDao {
 		return list.get(0);
 	}
 
-
 	public void insertProduct(ProductVO pvo) {
-		String sql= "insert into product(pseq, kind, name, price1, price2, price3, content, image)"
-				+ "values(product_seq.nextVal, ?, ?, ?, ?, ?, ?, ?)";
-		template.update(sql,pvo.getKind(), pvo.getName(), pvo.getPrice1(), pvo.getPrice2(), pvo.getPrice3(),
-							pvo.getContent(), pvo.getImage());		
+		String sql = "insert into product( pseq, kind, name, price1, price2, price3, content, image) "
+				+ " values( product_seq.nextVal, ? , ? , ? , ? , ? , ? , ? )";
+		template.update(sql, pvo.getKind(), pvo.getName(), pvo.getPrice1(), pvo.getPrice2(), 
+				pvo.getPrice3(), pvo.getContent(), pvo.getImage() );
 	}
 
-
 	public void updateProduct(ProductVO pvo) {
-		String sql = "update product set kind=?, useyn=?, name=?, price1=?, price2=?, price3=?"
-				+ "content=?, image=?, bestyn=? where pseq=?";
-		template.update(sql, pvo.getKind(), pvo.getUseyn(), pvo.getName(), pvo.getPrice1(), pvo.getPrice2(),
-				pvo.getPrice3(), pvo.getContent(), pvo.getImage(), pvo.getBestyn(), pvo.getPseq());
+		String sql = "update product set kind=? , useyn=? , name=? , price1=? , price2=?, "
+				+ " price3=?, content=? , image=?, bestyn=? where pseq=? ";
+		template.update(sql , pvo.getKind(), pvo.getUseyn(), pvo.getName(), pvo.getPrice1(), 
+				pvo.getPrice2(), pvo.getPrice3(), pvo.getContent(), pvo.getImage(), 
+				pvo.getBestyn(), pvo.getPseq() );
 		
 	}
 
-
 	public List<OrderVO> listOrderAll(Paging paging, String key) {
-		String sql= "select * from order view order by result, odseq desc";
-		List<OrderVO>list=template.query(sql, new RowMapper<OrderVO>() {
-
+		// String sql = "select * from order_view order by result, odseq desc";
+		String sql = "select * from ("
+				+ " select * from ( "
+				+ " select rownum as rn, o.* from "
+				+ " ((select * from order_view where mname like '%'||?||'%'  order by result , odseq desc) o)"
+				+ " ) where rn>=? "
+				+ " ) where rn<=? ";
+		List<OrderVO> list = template.query(sql, new RowMapper<OrderVO>() {
 			@Override
 			public OrderVO mapRow(ResultSet rs, int rowNum) throws SQLException {
-				OrderVO ovo=new OrderVO();
-				ovo.setOdseq(rs.getInt("odseq"));
-				ovo.setOseq(rs.getInt("oseq"));
-				ovo.setId(rs.getString("id"));
-				ovo.setIndate(rs.getTimestamp("indate"));
-				ovo.setMname(rs.getString("mname"));
-				ovo.setZipnum(rs.getString("zipnum"));
-				ovo.setAddress(rs.getString("address"));
-				ovo.setPhone(rs.getString("phone"));
-				ovo.setPseq(rs.getInt("pseq"));
-				ovo.setQuantity(rs.getInt("quantity"));
-				ovo.setPname(rs.getString("pname"));
-				ovo.setPrice2(rs.getInt("price2"));
-				ovo.setResult(rs.getString("result"));				
+				OrderVO ovo = new OrderVO();
+				ovo.setOdseq(rs.getInt("odseq"));				ovo.setOseq(rs.getInt("oseq"));
+				ovo.setId(rs.getString("id"));						ovo.setIndate(rs.getTimestamp("indate"));
+				ovo.setMname(rs.getString("mname"));		ovo.setZipnum(rs.getString("zip_num"));
+				ovo.setAddress(rs.getString("address"));		ovo.setPhone(rs.getString("phone"));
+				ovo.setPseq(rs.getInt("pseq"));					ovo.setQuantity(rs.getInt("quantity"));
+				ovo.setPname(rs.getString("pname"));			ovo.setPrice2(rs.getInt("price2"));
+				ovo.setResult(rs.getString("result"));
 				return ovo;
-			}			
-		});
+			}
+		} , key , paging.getStartNum() , paging.getEndNum());
 		return list;
 	}
+
+	public void updateOrderResult(int odseq) {
+		String sql = "Update order_detail set result='2' where odseq=?";
+		template.update(sql, odseq);
+	}
+
+	public List<QnaVO> listQnaAll(Paging paging, String key) {
+		String sql = "select * from ("
+				+ " select * from ( "
+				+ " select rownum as rn, o.* from "
+				+ " ((select * from qna  where subject like '%'||?||'%'  order by qseq desc) o)"
+				+ " ) where rn>=? "
+				+ " ) where rn<=? ";   // 제목과 내용에서 검색
+		List<QnaVO> list = template.query(sql, new RowMapper<QnaVO>() {
+			@Override
+			public QnaVO mapRow(ResultSet rs, int rowNum) throws SQLException {
+				QnaVO qvo = new QnaVO();
+				qvo.setQseq(rs.getInt("qseq"));
+				qvo.setSubject(rs.getString("subject"));
+				qvo.setContent(rs.getString("content"));
+				qvo.setId(rs.getString("id"));
+				qvo.setIndate(rs.getTimestamp("indate"));
+				qvo.setReply(rs.getString("reply"));
+				qvo.setRep(rs.getString("rep"));
+				return qvo;
+			}
+		} , key ,  paging.getStartNum() , paging.getEndNum() );
+		return list;
+	}
+	
+	public void updateQna(QnaVO qvo) {
+		String sql= "update qna set reply=? rep='2' where qseq=?";
+		template.update(sql, qvo.getReply(), qvo.getQseq());
+		
+	}
 }
+
+
+
+

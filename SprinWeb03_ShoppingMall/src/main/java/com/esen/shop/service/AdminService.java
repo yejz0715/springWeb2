@@ -9,10 +9,10 @@ import com.esen.shop.dao.AdminDao;
 import com.esen.shop.dto.OrderVO;
 import com.esen.shop.dto.Paging;
 import com.esen.shop.dto.ProductVO;
+import com.esen.shop.dto.QnaVO;
 
 @Service
 public class AdminService {
-
 
 	@Autowired
 	AdminDao adao;
@@ -30,19 +30,30 @@ public class AdminService {
 	}
 
 	public void insertProduct(ProductVO pvo) {
-		adao.insertProduct(pvo);
-		
+		adao.insertProduct(pvo);		
 	}
 
-	
-
 	public void updateProduct(ProductVO pvo) {
-		adao.updateProduct(pvo);
-		
+		adao.updateProduct(pvo);		
 	}
 
 	public List<OrderVO> listOrderAll(Paging paging, String key) {
-		return adao.listOrderAll(paging,key);
+		return adao.listOrderAll(paging, key);
+	}
+
+	public void updateOrderResult(int odseq) {
+		adao.updateOrderResult(odseq);
+		
+	}
+
+	public List<QnaVO> listQnaAll(Paging paging, String key) {
+		return adao.listQnaAll(paging, key);
 	}
 }
+
+
+
+
+
+
 

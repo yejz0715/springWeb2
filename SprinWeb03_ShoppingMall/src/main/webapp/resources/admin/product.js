@@ -113,4 +113,22 @@ function go_total_order(){
 function go_order_save(){
 }
 
+function go_search_order(){
+	if( document.frm.key.value=="") return;
+	var url="adminQnamList&page=1";
+	document.frm.action = url;
+	document.frm.submit();
+}
 
+
+
+function go_total_order(){
+	document.frm.key.value="";
+	document.frm.action = "adminQnamList&page=1";
+	document.frm.submit();
+}
+
+function go_re(qseq){
+	document.frm.action = "adminQnaRepsave";
+	document.frm.submit();
+}
