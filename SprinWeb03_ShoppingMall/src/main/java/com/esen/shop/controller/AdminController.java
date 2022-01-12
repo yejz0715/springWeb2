@@ -28,13 +28,13 @@ import com.oreilly.servlet.multipart.DefaultFileRenamePolicy;
 public class AdminController {
 
 	@Autowired
-	ProductService ps;   // getProduct()  사용
+	ProductService ps;   //getProduct() 사용
 	
 	@Autowired
-	QnaService qs;  // getQna() 사용
+	QnaService qs;  //getQna() 사용
 	
 	@Autowired
-	ServletContext context;   // 파일 업로드를 위해 준비
+	ServletContext context;   //파일 업로드를 위해 준비
 	
 	@Autowired
 	AdminService as;
@@ -113,7 +113,7 @@ public class AdminController {
 			
 			
 			Paging paging = new Paging();
-			paging.setPage(page);
+			paging.setPage(page);//paging불러줘야 페이지가 나옴
 			int count = as.getAllCount("product" , "name", key);
 			paging.setTotalCount(count);
 			
